@@ -42,11 +42,12 @@ Responsibilities of a worker:
     3. http_verb
     4. max_concurrent_users
     5. status: (ONGOING|FAILED|SUCCEEDED)
-- metrics:
+- response:
     1. request_data::id
-    2. start_time: Unix time when the request was sent  
-    3. request_status: PASSED|FAILED
+    2. request_status: PASSED|FAILED
+    3. start_time: Unix time when the request was sent  
     4. response_time: (in ms)
     5. response_status_code
 
-Note: The metrics table has a very high velocity, we could've also used a queue to buffer the incoming requests until it is written in the database.
+Note: The response table has a very high velocity, we could've also used a queue to buffer the incoming requests until it is written in the database.  
+Response table is the one whose rollups will be used to derive metrics.
