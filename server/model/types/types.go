@@ -1,4 +1,4 @@
-package model
+package types
 
 type HTTPRequestVerb string
 
@@ -13,4 +13,7 @@ type UserRequest struct {
 	RequestURL        string          `json:"request_url"`
 	RequestVerb       HTTPRequestVerb `json:"request_verb"`
 	MaxConcurrentUser int             `json:"max_concurrent_users"`
+}
+type Persistence interface {
+	StoreUserRequest(UserRequest) error
 }

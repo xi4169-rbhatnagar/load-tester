@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"server/model"
+	"server/model/types"
 
 	"golang.org/x/exp/slog"
 )
@@ -19,15 +21,21 @@ func HandleSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Decode request body in a UserRequest
-	var request model.UserRequest
+	var request types.UserRequest
 	err = json.Unmarshal(body, &request)
 	if err != nil {
 		reportError(w, fmt.Sprintf("error decoding request in UserRequest: %v", err), http.StatusBadRequest)
 		return
 	}
 
-	err = model.SubmitRequest(request)
-	if err != nil {
+	// Validate the user request params
+	if err = validateUserRequest(request); err != nil {
+		reportError(w, fmt.Sprintf("error validating request: %v", err), http.StatusBadRequest)
+		return
+	}
+
+	// Serve the request
+	if err = model.SubmitRequest(request); err != nil {
 		reportError(w, fmt.Sprintf("error serving user request: %v", err), http.StatusInternalServerError)
 		return
 	}
@@ -37,4 +45,23 @@ func reportError(w http.ResponseWriter, errorMessage string, statusCode int) {
 	slog.Error(errorMessage)
 	w.WriteHeader(statusCode)
 	w.Write([]byte(errorMessage))
+}
+
+func validateUserRequest(req model.UserRequest) error {
+	if req.MaxConcurrentUser <= 0 {
+		return fmt.Errorf("there must be atleast one concurrent users in the system to be load-testing")
+	}
+
+	if _, err := url.ParseQuery(req.RequestURL); err != nil {
+		return fmt.Errorf("invalid url: %v", err)
+	}
+
+	switch req.RequestVerb {
+	case model.POST, model.GET, model.DELETE, model.PUT:
+		break
+	default:
+		return fmt.Errorf("invalid request-verb '%s'", req.RequestVerb)
+	}
+
+	return nil
 }
