@@ -1,6 +1,6 @@
-package model
+package http_model
 
-import "server/model/types"
+import "github.com/xi4169-rbhatnagar/load-tester/modules/server/model/types"
 
 // SubmitRequest adds an entry to the queue for the incoming request for the
 // workers to work on it and also persists it to any persistence to be read

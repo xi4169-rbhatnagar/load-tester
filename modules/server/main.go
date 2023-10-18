@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
-	"server/config"
-	"server/server"
+
+	"github.com/xi4169-rbhatnagar/load-tester/modules/server/config"
+	"github.com/xi4169-rbhatnagar/load-tester/modules/server/server"
 )
 
 func main() {

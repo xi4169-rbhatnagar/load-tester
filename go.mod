@@ -1,4 +1,4 @@
-module server
+module github.com/xi4169-rbhatnagar/load-tester
 
 go 1.21.0
 

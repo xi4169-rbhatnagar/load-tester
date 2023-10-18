@@ -6,9 +6,9 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"server/model"
-	"server/model/types"
 
+	"github.com/xi4169-rbhatnagar/load-tester/modules/server/model"
+	"github.com/xi4169-rbhatnagar/load-tester/modules/server/model/types"
 	"golang.org/x/exp/slog"
 )
 
