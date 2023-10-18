@@ -35,7 +35,7 @@ func HandleSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Serve the request
-	if err = model.SubmitRequest(request); err != nil {
+	if err = model.SubmitRequest(request, nil, nil); err != nil {
 		reportError(w, fmt.Sprintf("error serving user request: %v", err), http.StatusInternalServerError)
 		return
 	}
@@ -47,7 +47,7 @@ func reportError(w http.ResponseWriter, errorMessage string, statusCode int) {
 	w.Write([]byte(errorMessage))
 }
 
-func validateUserRequest(req model.UserRequest) error {
+func validateUserRequest(req types.UserRequest) error {
 	if req.MaxConcurrentUser <= 0 {
 		return fmt.Errorf("there must be atleast one concurrent users in the system to be load-testing")
 	}
@@ -57,7 +57,7 @@ func validateUserRequest(req model.UserRequest) error {
 	}
 
 	switch req.RequestVerb {
-	case model.POST, model.GET, model.DELETE, model.PUT:
+	case types.POST, types.GET, types.DELETE, types.PUT:
 		break
 	default:
 		return fmt.Errorf("invalid request-verb '%s'", req.RequestVerb)

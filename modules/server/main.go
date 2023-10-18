@@ -1,25 +1,25 @@
-package main
+package server
 
 import (
 	"fmt"
 	"log/slog"
-	"os"
 
 	"github.com/xi4169-rbhatnagar/load-tester/modules/server/config"
-	"github.com/xi4169-rbhatnagar/load-tester/modules/server/server"
 )
 
-func main() {
+func Start() error {
 	port, err := getEnvInt(config.EnvKeyPort, config.DefaultPort)
 	if err != nil {
 		slog.Error(fmt.Sprintf("error getting port from env: %v", err))
-		os.Exit(1)
+		return err
 	}
 
-	s := server.New(port)
-	err = s.ListenAndServe()
-	if err != nil {
+	s := New(port)
+	slog.Info(fmt.Sprintf("Starting a server on port %d...", port))
+	if err = s.ListenAndServe(); err != nil {
 		slog.Error(fmt.Sprintf("error starting the server: %v", err))
-		os.Exit(1)
+		return err
 	}
+	fmt.Println("exitted the server")
+	return nil
 }
