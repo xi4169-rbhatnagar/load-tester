@@ -1,15 +1,16 @@
 package model
 
-import "github.com/xi4169-rbhatnagar/load-tester/modules/server/model/types"
+import (
+	"context"
 
-// SubmitRequest adds an entry to the queue for the incoming request for the
-// workers to work on it and also persists it to any persistence to be read
-// later
-//
+	"github.com/xi4169-rbhatnagar/load-tester/modules/server/model/types"
+)
+
+// SubmitRequest adds an entry to the task-queue for the incoming request
 // Params:
 //
 //	req: UserRequest to be worked upon
-//	queueStore: Store from which the listeners will be
-func SubmitRequest(req types.UserRequest, requestStore, queueStore types.Persistence) error {
-	return nil
+//	s: Store in which persisting our data
+func SubmitRequest(ctx context.Context, req types.UserRequest, s types.UserRequestStore) error {
+	return s.Store(ctx, req)
 }

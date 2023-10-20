@@ -1,5 +1,7 @@
 package types
 
+import "context"
+
 type HTTPRequestVerb string
 
 const (
@@ -14,6 +16,6 @@ type UserRequest struct {
 	RequestVerb       HTTPRequestVerb `json:"request_verb"`
 	MaxConcurrentUser int             `json:"max_concurrent_users"`
 }
-type Persistence interface {
-	StoreUserRequest(UserRequest) error
+type UserRequestStore interface {
+	Store(context.Context, UserRequest) error
 }
